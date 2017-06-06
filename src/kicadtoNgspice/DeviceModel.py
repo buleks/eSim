@@ -208,15 +208,48 @@ class DeviceModel(QtGui.QWidget):
                 self.row = self.row+1
                 self.devicemodel_dict_end[words[0]]=self.count
                 self.count = self.count+1
-                
-                       
-                
+
+            # elif eachline[0] == 'a':
+            #     self.devicemodel_dict_beg[words[0]] = self.count
+            #     mosfetbox = QtGui.QGroupBox()
+            #     mosfetgrid = QtGui.QGridLayout()
+            #     i = self.count
+            #     beg = self.count
+            #
+            #     # if words[0] != "aswitch":
+            #     #     mosfetbox.setTitle("Added model for MOSFET " + words[0] + " : aswitch")
+            #     #     self.entry_var[self.count] = QtGui.QLineEdit()
+            #     #     model = ".model switch3 aswitch(cntl_off=0.0 cntl_on=5.0 r_off=1e6)"
+            #     #     self.entry_var[self.count].setText(model)
+            #     #     mosfetgrid.addWidget(self.entry_var[self.count], self.row, 1)
+            #     #
+            #     #     # Adding Device Details
+            #     #     self.deviceDetail[self.count] = words[0]
+            #     #
+            #     #     self.devicemodel_dict_end[words[0]] = self.count
+            #     #
+            #     #     # Increment row and widget count
+            #     #     self.row = self.row + 1
+            #     #
+            #     #     self.count = self.count + 1
+            #     #
+            #     #     # CSS
+            #     #     mosfetbox.setStyleSheet(" \
+            #     #                     QGroupBox { border: 1px solid gray; border-radius: 9px; margin-top: 0.5em; } \
+            #     #                     QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; } \
+            #     #                     ")
+            #     #     self.obj_trac.deviceModelTrack[words[0]] = model
+            #     #     mosfetbox.setLayout(mosfetgrid)
+            #     #     self.grid.addWidget(mosfetbox)
+
             elif eachline[0] == 'm':
+                
                 self.devicemodel_dict_beg[words[0]]=self.count
                 mosfetbox=QtGui.QGroupBox()
                 mosfetgrid=QtGui.QGridLayout()
                 i=self.count
                 beg=self.count
+
                 mosfetbox.setTitle("Add library for MOSFET "+words[0]+" : "+words[5])
                 self.entry_var[self.count] =QtGui.QLineEdit()
                 self.entry_var[self.count].setText("")
@@ -225,15 +258,15 @@ class DeviceModel(QtGui.QWidget):
                 self.addbtn.setObjectName("%d" %self.count)
                 self.addbtn.clicked.connect(self.trackLibrary)
                 mosfetgrid.addWidget(self.addbtn,self.row,2)
-                
+
                 #Adding Device Details
                 self.deviceDetail[self.count] = words[0]
-                                
+
                 #Increment row and widget count
                 self.row = self.row+1
                 self.count = self.count+1
-                
-                #Adding to get MOSFET dimension                
+
+                #Adding to get MOSFET dimension
                 self.widthLabel[self.count] = QtGui.QLabel("Enter width of MOSFET "+words[0]+"(default=100u):")
                 mosfetgrid.addWidget(self.widthLabel[self.count],self.row,0)
                 self.entry_var[self.count] = QtGui.QLineEdit()
@@ -242,7 +275,7 @@ class DeviceModel(QtGui.QWidget):
                 mosfetgrid.addWidget(self.entry_var[self.count],self.row,1)
                 self.row = self.row + 1
                 self.count = self.count+1
-                
+
                 self.lengthLabel[self.count] = QtGui.QLabel("Enter length of MOSFET "+words[0]+"(default=100u):")
                 mosfetgrid.addWidget(self.lengthLabel[self.count],self.row,0)
                 self.entry_var[self.count] = QtGui.QLineEdit()
@@ -251,8 +284,8 @@ class DeviceModel(QtGui.QWidget):
                 mosfetgrid.addWidget(self.entry_var[self.count],self.row,1)
                 self.row = self.row + 1
                 self.count = self.count+1
-                
-                
+
+
                 self.multifactorLable[self.count] = QtGui.QLabel("Enter multiplicative factor of MOSFET "+words[0]+"(default=1):")
                 mosfetgrid.addWidget(self.multifactorLable[self.count],self.row,0)
                 self.entry_var[self.count] = QtGui.QLineEdit()

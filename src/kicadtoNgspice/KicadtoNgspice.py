@@ -88,6 +88,7 @@ class MainWindow(QtGui.QWidget):
         sourcelist=[]
         sourcelisttrack=[]
         schematicInfo,sourcelist = obj_proc.insertSpecialSourceParam(schematicInfo,sourcelist)
+
                 
         #List storing model detail
         global modelList,outputOption,unknownModelList,multipleModelList,plotText
@@ -447,7 +448,6 @@ class MainWindow(QtGui.QWidget):
             #Adding Device Library to SchematicInfo
             store_schematicInfo = self.obj_convert.addDeviceLibrary(store_schematicInfo,self.kicadFile)
             print "Netlist After Adding Device Model Library :",store_schematicInfo
-            
             #Adding Subcircuit Library to SchematicInfo
             store_schematicInfo = self.obj_convert.addSubcircuit(store_schematicInfo, self.kicadFile)
             print "Netlist After Adding subcircuits :",store_schematicInfo
@@ -490,7 +490,7 @@ class MainWindow(QtGui.QWidget):
         #print "OUTPUTOPTION",outputOption
         #print "KicadfIle",kicadFile
         store_optionInfo = list(optionInfo) #To avoid writing optionInfo twice in final netlist
-                
+
         #checking if analysis files is present
         (projpath,filename) = os.path.split(self.kicadFile)
         analysisFileLoc = os.path.join(projpath,"analysis")
@@ -512,6 +512,7 @@ class MainWindow(QtGui.QWidget):
             
         #Adding analysis file info to optionInfo
         analysisData=data.splitlines()
+
         for eachline in analysisData:
             eachline=eachline.strip()
             if len(eachline)>1:
@@ -541,6 +542,8 @@ class MainWindow(QtGui.QWidget):
             elif (option=='.nodeset' or option=='.ic'):  
                 initialCondOption.append(eachline+'\n')
             elif option=='.option':  
+                simulatorOption.append(eachline+'\n')
+            elif option=='.param':  
                 simulatorOption.append(eachline+'\n')
             #elif (option=='.include' or option=='.lib'):
             #    includeOption.append(eachline+'\n')

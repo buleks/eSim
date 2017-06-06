@@ -233,7 +233,22 @@ class Convert:
                 except Exception as e:
                     print "Caught an exception in transfo model ",line[1]
                     print "Exception Message : ",str(e)
-                    
+
+            elif line[2] == 'm_aswitch':
+                try:
+                    start = line[7]
+                    end = line[8]
+                    componentName = line[3]
+                    modeldef = str(self.obj_track.model_entry_var[start ].text())
+                    modelElements = modeldef.split(" ")
+                    if len(modelElements) < 2:
+                        addmodelLine = ".model aswitch_"+componentName+" aswitch(cntl_off=0.0 cntl_on=5.0 r_off=1e6)"
+
+                    modelParamValue.append([line[0], addmodelLine, line[4]])
+                except Exception as e:
+                    print "Caught an exception in aswitch model ",line[1]
+                    print "Exception Message : ",str(e)
+
             elif line[2] == 'ic':
                 try:
                     start=line[7]
@@ -313,6 +328,7 @@ class Convert:
         deviceLibList = self.obj_track.deviceModelTrack
         deviceLine = {} #Key:Index, Value:with its updated line in the form of list 
         includeLine = [] #All .include line list
+        modelLine = [];
         
         if not deviceLibList:
             print "No Library Added in the schematic"
@@ -321,48 +337,56 @@ class Convert:
             for eachline in schematicInfo:
                 words = eachline.split()
                 if words[0] in deviceLibList:
+              
                     print "Found Library line"
                     index = schematicInfo.index(eachline)
                     completeLibPath = deviceLibList[words[0]]
-                    (libpath,libname) = os.path.split(completeLibPath)
-                    print "Library Path :",libpath                                      
-                    #Copying library from devicemodelLibrary to Project Path
-                    #Special case for MOSFET
-                    if eachline[0] == 'm':
-                        #For mosfet library name come along with MOSFET dimension information
-                        tempStr = libname.split(':')
-                        libname = tempStr[0]
-                        dimension = tempStr[1]
-                        #Replace last word with library name
-                        #words[-1] = libname.split('.')[0]
-                        words[-1] = self.getRefrenceName(libname,libpath)
-                        #Appending Dimension of MOSFET
-                        words.append(dimension)
-                        deviceLine[index] = words                    
-                        includeLine.append(".include "+libname)
-                        
-                        #src = completeLibPath.split(':')[0] # <----- Not working in Windows
-                        
-                        (src_path,src_lib) = os.path.split(completeLibPath)
-                        src_lib = src_lib.split(':')[0]
-                        src = os.path.join(src_path,src_lib)
-                        dst = projpath
-                        shutil.copy2(src, dst)
+                    if completeLibPath[0:6] == ".model":
+                        print ("Found model instead library line")
+                        print (completeLibPath)
+                        modelLine.append(completeLibPath);
                     else:
-                        #Replace last word with library name
-                        #words[-1] = libname.split('.')[0]
-                        words[-1] = self.getRefrenceName(libname,libpath)
-                        deviceLine[index] = words                    
-                        includeLine.append(".include "+libname)
-                        
-                        src = completeLibPath
-                        dst = projpath
-                        shutil.copy2(src,dst)
+                        (libpath,libname) = os.path.split(completeLibPath)
+                        print "Library Path :",libpath
+                        #Copying library from devicemodelLibrary to Project Path
+                        #Special case for MOSFET
+                        if eachline[0] == 'm':
+                            #For mosfet library name come along with MOSFET dimension information
+                            tempStr = libname.split(':')
+                            libname = tempStr[0]
+                            dimension = tempStr[1]
+                            #Replace last word with library name
+                            #words[-1] = libname.split('.')[0]
+                            words[-1] = self.getRefrenceName(libname,libpath)
+                            #Appending Dimension of MOSFET
+                            words.append(dimension)
+                            deviceLine[index] = words                    
+                            includeLine.append(".include "+libname)
+                            
+                            #src = completeLibPath.split(':')[0] # <----- Not working in Windows
+                            
+                            (src_path,src_lib) = os.path.split(completeLibPath)
+                            src_lib = src_lib.split(':')[0]
+                            src = os.path.join(src_path,src_lib)
+                            dst = projpath
+                            shutil.copy2(src, dst)
+
+                        else:
+                    
+                            #Replace last word with library name
+                            #words[-1] = libname.split('.')[0]
+                            words[-1] = self.getRefrenceName(libname,libpath)
+                            deviceLine[index] = words                    
+                            includeLine.append(".include "+libname)
+                            
+                            src = completeLibPath
+                            dst = projpath
+                            shutil.copy2(src,dst)
                     
                 else:
                     pass
             
-            
+      
             #Adding device line to schematicInfo
             for index,value in deviceLine.iteritems():
                 #Update the device line
@@ -372,6 +396,9 @@ class Convert:
             #This has to be second i.e after deviceLine details
             #Adding .include line to Schematic Info at the start of line
             for item in list(set(includeLine)):
+                schematicInfo.insert(0,item)
+                
+            for item in list(set(modelLine)):
                 schematicInfo.insert(0,item)
         
                             

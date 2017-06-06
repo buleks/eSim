@@ -32,11 +32,13 @@ class PrcocessNetlist:
                     for i in range(1, len(words), 1):
                         paramList=words[i].split('=')
                         param[paramList[0]]=paramList[1]
+        
         return param
     
     def preprocessNetlist(self,kicadNetlis,param):
         """Preprocess netlist (replace parameters)"""
         netlist=[]
+  
         for eachline in kicadNetlis:
             # Remove leading and trailing blanks spaces from line 
             eachline=eachline.strip()
@@ -73,6 +75,8 @@ class PrcocessNetlist:
         for eachline in netlist:
             if eachline[0]=='*':
                 continue
+            elif eachline == ".end":
+				continue
             elif eachline[0]=='.':
                 optionInfo.append(eachline)
             else:
@@ -189,6 +193,7 @@ class PrcocessNetlist:
                     all_dir = [x[0] for x in os.walk(PrcocessNetlist.modelxmlDIR)]
                     for each_dir in all_dir:
                         all_file = os.listdir(each_dir)
+                        print (all_file)
                         if xmlfile in all_file:
                             count += 1
                             modelPath.append(os.path.join(each_dir,xmlfile))
@@ -372,7 +377,32 @@ class PrcocessNetlist:
                     
                 print "UnknownModelList Used in the Schematic",unknownModelList
                 print "Multiple Model XML file with same name ",multipleModelList
-                print "Model List Details : ",modelList  
+                print "Model List Details : ",modelList
+
+            elif compName[0]=='m' or compName[0] == 'M':
+                index = schematicInfo.index(compline)
+                compType = words[-1];
+                schematicInfo.remove(compline)
+                if compType == "aswitch":
+                    #example AMX2 %vd[317 100] %v 316 0 switch3
+                    schematicInfo.insert(index, "* " + compline)
+                    drain = words[1]
+                    gate = words[2]
+                    source = words[3]
+                    modelLine = "am" + str(k) + " %vd " +  gate + " " + source + " %gd (" + drain + " " + source + ") aswitch_"+words[0]
+                    schematicInfo.append(modelLine)
+                    k = k + 1
+
+                    modelname = "m_aswitch"
+                    comment = "* " + compline
+                    title = "Mosfet model as aswitch " + compName
+                    type = "NA"  # It is model but do not load from xml and lib file
+                    paramDict['model'] = "Model:"
+
+                    modelList.append([index, compline, modelname, compName, comment, title, type, paramDict])
+
+
+
                 
         return schematicInfo,outputOption,modelList,unknownModelList,multipleModelList,plotText
         
