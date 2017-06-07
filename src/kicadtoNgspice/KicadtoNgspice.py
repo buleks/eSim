@@ -262,6 +262,7 @@ class MainWindow(QtGui.QWidget):
         ET.SubElement(attr_tran,"field4",name="Start Combo").text= obj_analysis.tran_parameter[0]
         ET.SubElement(attr_tran,"field5",name="Step Combo").text= obj_analysis.tran_parameter[1]
         ET.SubElement(attr_tran,"field6",name="Stop Combo").text= obj_analysis.tran_parameter[2]
+        ET.SubElement(attr_tran, "field7", name="UIC").text = str(obj_analysis.tran_entry_var[3].checkState())
         #print "TRAN PARAMETER 2-----",obj_analysis.tran_parameter[2]
                      
         if check==0:

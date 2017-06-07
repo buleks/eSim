@@ -153,7 +153,11 @@ class Convert:
 
         elif self.variable == 'TRAN':
             self.no= 0
-            self.writefile.write(".tran" + ' '+ str(self.defaultvalue(self.tran_entry_var[self.no+1].text())) + self.converttosciform(self.trans_parameter[self.no+1]) + ' ' + str(self.defaultvalue(self.tran_entry_var[self.no+2].text())) + self.converttosciform(self.trans_parameter[self.no+2])+' '+ str(self.defaultvalue(self.tran_entry_var[self.no].text()))+ self.converttosciform(self.trans_parameter[self.no]))
+            uic_checkbox = self.tran_entry_var[self.no + 3]
+            uic_text = ""
+            if uic_checkbox.isChecked():
+                uic_text = " uic"
+            self.writefile.write(".tran" + ' '+ str(self.defaultvalue(self.tran_entry_var[self.no+1].text())) + self.converttosciform(self.trans_parameter[self.no+1]) + ' ' + str(self.defaultvalue(self.tran_entry_var[self.no+2].text())) + self.converttosciform(self.trans_parameter[self.no+2])+' '+ str(self.defaultvalue(self.tran_entry_var[self.no].text()))+ self.converttosciform(self.trans_parameter[self.no])+uic_text)
 
         else:
             pass

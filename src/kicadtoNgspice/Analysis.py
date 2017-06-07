@@ -550,7 +550,7 @@ class Analysis(QtGui.QWidget):
         self.trgrid.addWidget(self.step,2,0)
         self.trgrid.addWidget(self.stop,3,0)
         self.count=0
-        
+
         self.tran_entry_var[self.count] = QtGui.QLineEdit()
         self.trgrid.addWidget(self.tran_entry_var[self.count],1,1)
         self.tran_entry_var[self.count].setMaximumWidth(150)
@@ -563,6 +563,11 @@ class Analysis(QtGui.QWidget):
         self.trgrid.addWidget(self.tran_entry_var[self.count],3,1)
         self.tran_entry_var[self.count].setMaximumWidth(150)
         self.count= self.count+1
+
+        #UIC checkbox
+        self.tran_entry_var[self.count] = QtGui.QCheckBox("UIC")
+        self.trgrid.addWidget(self.tran_entry_var[self.count], 4, 1)
+        self.count = self.count + 1
         
         self.parameter_cnt=0
         self.start_combobox = QtGui.QComboBox()
@@ -627,6 +632,8 @@ class Analysis(QtGui.QWidget):
                 
                 index=self.stop_combobox.findText(root[2][5].text)
                 self.stop_combobox.setCurrentIndex(index)
+
+                self.tran_entry_var[3].setCheckState(int(root[2][6].text))
             except:
                 print "Transient Analysis XML Parse Error"
 
