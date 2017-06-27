@@ -247,7 +247,8 @@ class Convert:
                     modelElements = modeldef.split(" ")
                     if len(modelElements) < 2:
                         addmodelLine = ".model aswitch_"+componentName+" aswitch(cntl_off=1.0 cntl_on=5.0 r_off=1e6 r_on=100e-3)"
-
+                    else:
+                        addmodelLine=".model aswitch_"+componentName+" "+modeldef
                     modelParamValue.append([line[0], addmodelLine, line[4]])
                 except Exception as e:
                     print "Caught an exception in aswitch model ",line[1]
