@@ -44,18 +44,20 @@ class PrcocessNetlist:
             eachline=eachline.strip()
             # Remove special character $
             eachline=eachline.replace('$','')
+
+            #Parameter analysis disabled
             # Replace parameter with values
-            for subParam in eachline.split():
-                if '}' in subParam:
-                    key=subParam.split()[0]
-                    key=key.strip('{')
-                    key=key.strip('}')
-                    if key in param:
-                        eachline=eachline.replace('{'+key+'}',param[key])
-                    else:
-                        print "Parameter " + key +" does not exists"
-                        value=raw_input('Enter parameter value: ')
-                        eachline=eachline.replace('{'+key+'}',value)
+            # for subParam in eachline.split():
+            #     if '}' in subParam:
+            #         key=subParam.split()[0]
+            #         key=key.strip('{')
+            #         key=key.strip('}')
+            #         if key in param:
+            #             eachline=eachline.replace('{'+key+'}',param[key])
+            #         else:
+            #             print "Parameter " + key +" does not exists"
+            #             value=raw_input('Enter parameter value: ')
+            #             eachline=eachline.replace('{'+key+'}',value)
             #Convert netlist into lower case letter     
             eachline=eachline.lower()
             # Construct netlist
@@ -400,6 +402,32 @@ class PrcocessNetlist:
                     paramDict['model'] = "Model:"
 
                     modelList.append([index, compline, modelname, compName, comment, title, type, paramDict])
+            elif compName[0] == 'T' or compName[0] == 't':
+                index = schematicInfo.index(compline)
+                compType = words[-1];
+                schematicInfo.remove(compline)
+                if compType == "trafo1":
+                    print "~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+                    schematicInfo.insert(index, "* " + compline)
+                    l1a = words[1]
+                    l1b = words[2]
+                    l2a = words[3]
+                    l2b = words[4]
+                    l1_ind = words[5]
+                    l2_ind = words[6]
+                    l12_K = words[7]
+                    l1name = "l1t" + str(k)
+                    modelLine = l1name +" "+ l1a + " " + l1b + " " + l1_ind
+                    print "Linia:"+modelLine
+                    schematicInfo.append(modelLine)
+                    l2name = "l2t" + str(k)
+                    modelLine = l2name +" "+ l2a + " " + l2b + " " + l2_ind
+                    schematicInfo.append(modelLine)
+                    modelLine = "KT"+str(k)+"L12 "+  l1name + " "+ l2name +" "+ l12_K
+                    schematicInfo.append(modelLine)
+                    k = k + 1
+
+
 
 
 

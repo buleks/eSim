@@ -246,7 +246,7 @@ class Convert:
                     modeldef = str(self.obj_track.model_entry_var[start ].text())
                     modelElements = modeldef.split(" ")
                     if len(modelElements) < 2:
-                        addmodelLine = ".model aswitch_"+componentName+" aswitch(cntl_off=0.0 cntl_on=5.0 r_off=1e6)"
+                        addmodelLine = ".model aswitch_"+componentName+" aswitch(cntl_off=1.0 cntl_on=5.0 r_off=1e6 r_on=100e-3)"
 
                     modelParamValue.append([line[0], addmodelLine, line[4]])
                 except Exception as e:
